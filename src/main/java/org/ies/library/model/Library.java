@@ -1,5 +1,6 @@
 package org.ies.library.model;
 
+import jdk.dynalink.linker.LinkerServices;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.ies.library.excepcions.BookNotFoundException;
@@ -7,6 +8,7 @@ import org.ies.library.excepcions.MemberNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -16,6 +18,8 @@ public class Library {
     private String libraryName;
     private Map<String, Book> bookByIsbn;
     private Map<String, Partner> partnerByNif;
+    private List<BooklendHistory> historyList;
+
 
     private static final Logger log = LoggerFactory.getLogger(Library.class);
 
@@ -45,6 +49,7 @@ public class Library {
     public Book bookOfIsbn(String isbn) throws BookNotFoundException {
 
         if (bookByIsbn.containsKey(isbn)){
+            // get  --> lo saca del mapa
             return bookByIsbn.get(isbn);
 
         } else {
@@ -75,11 +80,10 @@ public class Library {
     // Si no existe el socio MemberNotFoundException(nif) y si no existe el libro BookNotFoundException(isbn)
     public boolean partnerMakesLoan(String nif, String isbn) throws MemberNotFoundException, BookNotFoundException{
 
-        if (partnerByNif != null){
+        if (partnerByNif.containsKey(nif)){
+            if (bookByIsbn.containsKey(isbn)){
 
-            if (bookByIsbn != null){
-
-                return true;
+                //for de pres y luego if
             } else {
                 throw new BookNotFoundException(isbn);
             }
@@ -88,6 +92,15 @@ public class Library {
         }
     }
 }
+
+// Test  --> 4 escenarios
+        // 1. El socio existe
+        // 2. El socio no existe
+        // 3.pres si existe
+        // 4.pres no existe
+
+
+
 //Nombre de la biblioteca
 //
 //Libros indexados por isbn. Por cada libro se guardará: ISBN, título, autor, géneros (listado) H
