@@ -6,6 +6,7 @@ public class BookNotFoundException extends Exception {
 
     public BookNotFoundException(String isbn) {
         super("No se ha encontrado el libro con isbn: " + isbn);
+        this.isbn = isbn;
 
     }
 
